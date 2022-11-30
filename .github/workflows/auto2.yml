@@ -1,0 +1,38 @@
+name: Auto2
+
+on:
+  schedule:
+    - cron: "30 00 * * *" # 北京时间在此基础上+8小时
+  workflow_dispatch:
+
+env:
+  COOKIE: ${{ secrets.COOKIE_2 }}
+  EMAIL_USER: ${{ secrets.EMAIL_USER }}
+  EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+  EMAIL_TO: ${{ secrets.EMAIL_TO }}
+  DINGDING_WEBHOOK: ${{ secrets.DINGDING_WEBHOOK }}
+  PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+  WEIXIN_WEBHOOK: ${{ secrets.WEIXIN_WEBHOOK }}
+
+jobs:
+  CheckIn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: Run Project
+        run: |
+          cd workflows
+          yarn
+          yarn checkin
+  SeaGold:
+    needs: CheckIn
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - name: Run Project
+        run: |
+          cd workflows
+          yarn
+          yarn seagold
